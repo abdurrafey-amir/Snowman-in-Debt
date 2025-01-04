@@ -2,6 +2,7 @@ import pygame
 import random
 from snowman import Snowman
 from task import Task
+from task import snow
 
 # initialize
 pygame.init()
@@ -27,6 +28,7 @@ FPS = 60
 def main():
     snowman = Snowman(WIDTH // 2, HEIGHT // 2)
     tasks = [Task(random.randint(50, WIDTH - 50), random.randint(50, HEIGHT - 50)) for _ in range(5)]
+    
 
     running = True
     while running:
@@ -42,12 +44,18 @@ def main():
 
         # draw tasks
         for task in tasks:
+            
+            # snow
+
+            snow_obj = [screen, BLACK, (task.x, task.y, task.width, task.height)]
+            if snow_obj not in snow:
+                snow.append(snow_obj)
+            
             task.draw(screen)
             reward = task.check_collision(snowman)
             if reward > 0:
                 snowman.debt -= reward
 
-        
         # display debt and health
         font = pygame.font.SysFont('Arial', 24)
         debt_text = font.render(f'Debt: ${snowman.debt}', True, BLACK)
@@ -63,5 +71,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 
